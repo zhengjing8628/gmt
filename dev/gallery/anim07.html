@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>(7) Spinning Earth showing crustal ages &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/searchtools.js"></script>
+    <script type="text/javascript" src="../../_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Users Script Contributions" href="../Users_contrib_script.html" />
+    <link rel="prev" title="(6) Demonstrate aliasing by sampling a chirp" href="anim06.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../Users_contrib_script.html" title="Users Script Contributions"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="anim06.html" title="(6) Demonstrate aliasing by sampling a chirp"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" accesskey="U">The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spinning-earth-showing-crustal-ages">
+<span id="anim-07"></span><h1>(7) Spinning Earth showing crustal ages<a class="headerlink" href="#spinning-earth-showing-crustal-ages" title="Permalink to this headline">¶</a></h1>
+<p>It is relatively simple to make a spinning Earth movie
+by using the frame number as view longitude.  Here we
+simulate sunlight to modulate the slopes of the global
+relief and color the seafloor using the crustal age
+grids from EarthByte.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1">#               GMT ANIMATION 07</span>
+<span class="c1">#</span>
+<span class="c1"># Purpose:      Make a Plate Tectonics movie of crustal ages</span>
+<span class="c1"># GMT modules:  math, set, grdgradient, grdmath, grdimage, makecpt, movie, coast</span>
+<span class="c1"># Unix progs:   cat</span>
+<span class="c1"># Note:         Run with any argument to build movie; otherwise one frame is plotted only.</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$#</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>   <span class="c1"># Just make master PostScript frame 10</span>
+        <span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-M10,ps -Fnone&quot;</span>
+	<span class="nv">ps</span><span class="o">=</span>anim_07.ps
+<span class="k">else</span>    <span class="c1"># Make both movie formats and a thumbnail animated GIF using every 4th frame</span>
+        <span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-Fmp4 -Fwebm -A+l+s5&quot;</span>
+<span class="k">fi</span>
+<span class="c1"># 1. Create background plot and data files needed in the loop</span>
+cat <span class="s">&lt;&lt; EOF &gt; pre.sh</span>
+<span class="s"># Set view and sun longitudes</span>
+<span class="s">gmt math -T0/360/5 -I T 5 SUB = longitudes.txt</span>
+<span class="s"># Exctact a topography CPT</span>
+<span class="s">gmt makecpt -Cdem2 -T0/6000 &gt; movie_dem.cpt</span>
+<span class="s"># Get gradients of the relief from N45E</span>
+<span class="s">gmt grdgradient @earth_relief_20m -Nt1.25 -A45 -Gintens.nc</span>
+<span class="s">EOF</span>
+<span class="c1"># 2. Set up main script</span>
+cat <span class="s">&lt;&lt; EOF &gt; main.sh</span>
+<span class="s">gmt begin</span>
+<span class="s">	# Let HSV minimum value go to zero</span>
+<span class="s">	gmt set COLOR_HSV_MIN_V 0</span>
+<span class="s">	# Fake simulation of sun illumination from east combined with relief slopes</span>
+<span class="s">	gmt grdmath intens.nc X \${MOVIE_COL2} SUB DUP -180 LE 360 MUL ADD 90 DIV ERF ADD 0.25 SUB = s.nc</span>
+<span class="s">	# Plot age grid first using age cpt</span>
+<span class="s">	gmt grdimage @age.3.20.nc -Is.nc -C@crustal_age.cpt -JG\${MOVIE_COL1}/0/6i -X0 -Y0</span>
+<span class="s">	# Clip to expose land areas only</span>
+<span class="s">	gmt coast -Gc</span>
+<span class="s">	# Overlay relief over land only using dem cpt</span>
+<span class="s">	gmt grdimage @earth_relief_20m -Is.nc -Cmovie_dem.cpt</span>
+<span class="s">	# Undo clipping and overlay gridlines</span>
+<span class="s">	gmt coast -Q -B30g30</span>
+<span class="s">gmt end</span>
+<span class="s">EOF</span>
+<span class="c1"># 3. Run the movie</span>
+gmt movie main.sh -Sbpre.sh -C6ix6ix100 -Tlongitudes.txt -Nanim_07 -H2 -Z <span class="nv">$opt</span>
+rm -rf main.sh pre.sh
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/anim_07.png"><img alt="../_images/anim_07.png" src="../_images/anim_07.png" style="width: 0px;" /></a>
+<div class="figure align-center">
+  <video width="720" height="480" poster="../_images/anim_07.png" controls>
+    <source src="../_static/anim_07.mp4" type="video/mp4">
+    <source src="../_static/anim_07.webm" type="video/webm">
+    Your browser does not support the video tag.
+  </video>
+  <p class="caption">Spinning Earth showing crustal ages.</p>
+</div></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="anim06.html"
+                        title="previous chapter">(6) Demonstrate aliasing by sampling a chirp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Users_contrib_script.html"
+                        title="next chapter">Users Script Contributions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/anim07.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../Users_contrib_script.html" title="Users Script Contributions"
+             >next</a> </li>
+        <li class="right" >
+          <a href="anim06.html" title="(6) Demonstrate aliasing by sampling a chirp"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" >The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

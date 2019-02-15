@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>clear &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <script type="text/javascript" src="_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="B" href="B.html" />
+    <link rel="prev" title="subplot" href="subplot.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="B.html" title="B"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="subplot.html" title="subplot"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="clear">
+<h1>clear<a class="headerlink" href="#clear" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Delete current history, conf, cpt, or the cache, data or sessions directories</p>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p><strong>gmt clear</strong> [<em>all</em> |<em>cache</em> |<em>conf</em> |<em>cpt</em> |<em>data</em> |<em>history</em> |<em>sessions</em> ]
+[ <a class="reference internal" href="#v"><span> <strong>-V</strong></span></a></strong>[<em>level</em>] ]
+[ <strong>--PAR</strong>=<em>value</em> ]</p>
+<p><strong>Note:</strong> No space is allowed between the option flag and the associated arguments.</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The clear command allows users to delete their current history, conf,
+or cpt file, remove the entire user cache, data, or sessions directory, or all of the above.</p>
+</div>
+<div class="section" id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils" id="clear-all">
+<dt><em>all</em></dt>
+<dd>Deletes all the items under the control of the individual targets.</dd>
+</dl>
+<dl class="docutils" id="clear-conf">
+<dt><em>conf</em></dt>
+<dd>Delete the current gmt.conf file used for the modern session.</dd>
+</dl>
+<dl class="docutils" id="clear-cpt">
+<dt><em>cpt</em></dt>
+<dd>Delete the current (and hidden) cpt in effect (if any) for the modern session.</dd>
+</dl>
+<dl class="docutils" id="clear-cache">
+<dt><em>cache</em></dt>
+<dd>Delete the user’s cache directory and its contents.</dd>
+</dl>
+<dl class="docutils" id="clear-data">
+<dt><em>data</em></dt>
+<dd>Delete the user’s data download directory and its contents.</dd>
+</dl>
+<dl class="docutils" id="clear-history">
+<dt><em>history</em></dt>
+<dd>Deletes the current gmt.history file for the modern session.</dd>
+</dl>
+<dl class="docutils" id="clear-sessions">
+<dt><em>sessions</em></dt>
+<dd>Delete the user’s sessions directory.</dd>
+</dl>
+<dl class="docutils" id="clear-v">
+<dt><strong>-V</strong>[<em>level</em>] <a class="reference internal" href="gmt.html#v-full"><span class="std std-ref">(more …)</span></a></dt>
+<dd>Select verbosity level [c].  </dd>
+</dl>
+<dl class="docutils">
+<dt><strong>-^</strong> or just <strong>-</strong></dt>
+<dd>Print a short message about the syntax of the command, then exits (NOTE: on Windows just use <strong>-</strong>).</dd>
+<dt><strong>-+</strong> or just <strong>+</strong></dt>
+<dd>Print an extensive usage (help) message, including the explanation of
+any module-specific option (but not the GMT common options), then exits.</dd>
+<dt><strong>-?</strong> or no arguments</dt>
+<dd>Print a complete usage (help) message, including the explanation of all options, then exits.</dd>
+<dt><strong>--PAR</strong>=<em>value</em></dt>
+<dd>Temporarily override a GMT default setting; repeatable.  See gmt.conf for parameters.</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>To remove the current CPT file that was created by grdimage in an
+earlier command, use</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmt</span> <span class="n">clear</span> <span class="n">cpt</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To completely wipe your GMT cache directory, try</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmt</span> <span class="n">clear</span> <span class="n">cache</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="begin.html"><span class="doc">begin</span></a>,
+<a class="reference internal" href="docs.html"><span class="doc">docs</span></a>,
+<a class="reference internal" href="end.html"><span class="doc">end</span></a>,
+<a class="reference internal" href="figure.html"><span class="doc">figure</span></a>,
+<a class="reference internal" href="inset.html"><span class="doc">inset</span></a>,
+<a class="reference internal" href="subplot.html"><span class="doc">subplot</span></a>,
+<a class="reference internal" href="gmt.html"><span class="doc">gmt</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">clear</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#optional-arguments">Optional Arguments</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="subplot.html"
+                        title="previous chapter">subplot</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="B.html"
+                        title="next chapter">B</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/clear.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="B.html" title="B"
+             >next</a> </li>
+        <li class="right" >
+          <a href="subplot.html" title="subplot"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

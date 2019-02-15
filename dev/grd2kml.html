@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>grd2kml &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <script type="text/javascript" src="_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="grd2xyz" href="grd2xyz.html" />
+    <link rel="prev" title="grd2cpt" href="grd2cpt.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="grd2xyz.html" title="grd2xyz"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="grd2cpt.html" title="grd2cpt"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="GR.html" accesskey="U">GR</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="grd2kml">
+<span id="index-0"></span><h1>grd2kml<a class="headerlink" href="#grd2kml" title="Permalink to this headline">¶</a></h1>
+<p>Create KML image quadtree from single grid</p>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p><strong>gmt grd2kml</strong> <em>grid</em>
+[ <a class="reference internal" href="#c"><span> <strong>-C</strong></span></a></strong><em>cpt</em> ]
+[ <a class="reference internal" href="#e"><span> <strong>-E</strong></span></a></strong><em>URL</em> ]
+[ <a class="reference internal" href="#f"><span> <strong>-F</strong></span></a></strong><em>filtercode</em> ]
+[ <a class="reference internal" href="#h"><span> <strong>-H</strong></span></a></strong><em>factor</em> ]
+[ <a class="reference internal" href="#i"><span> <strong>-I</strong></span></a></strong>[<em>intensfile</em>|<em>intensity</em>|<em>modifiers</em>] ]
+[ <a class="reference internal" href="#l"><span> <strong>-L</strong></span></a></strong><em>tilesize</em> ]
+[ <a class="reference internal" href="#n"><span> <strong>-N</strong></span></a></strong><em>prefix</em> ]
+[ <a class="reference internal" href="#q"><span> <strong>-Q</strong></span></a></strong> ]
+[ <a class="reference internal" href="#t"><span> <strong>-T</strong></span></a></strong><em>title</em> ]
+[ <a class="reference internal" href="#v"><span> <strong>-V</strong></span></a></strong>[<em>level</em>] ]
+[ <strong>-f</strong><a class="reference internal" href="gmt.html#f-full"><span class="std std-ref">flags</span></a> ]
+[ <strong>--PAR</strong>=<em>value</em> ]</p>
+<p><strong>Note:</strong> No space is allowed between the option flag and the associated arguments.</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p><strong>grd2kml</strong> reads a 2-D grid file and makes a <em>quadtree</em> of
+PNG images and KML wrappers for Google Earth using the selected
+tile size [256x256 pixels].  We downsample the grid depending on the
+viewing level in the quadtree using a Gaussian filter, but other
+filters can be selected as well.
+Optionally, illumination may be added by providing a grid file with
+intensities in the (-1,+1) range or by giving instructions to derive intensities
+from the input data grid automatically (see <strong>-I</strong>). Values outside the (-1,+1) intensity range will be
+clipped. Map colors are specified via a color palette lookup table.</p>
+</div>
+<div class="section" id="required-arguments">
+<h2>Required Arguments<a class="headerlink" href="#required-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><em>grid</em></dt>
+<dd>A 2-D gridded data set (See GRID FILE FORMATS below.)</dd>
+</dl>
+</div>
+<div class="section" id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils" id="c">
+<dt><strong>-C</strong><em>cpt</em></dt>
+<dd>Name of the color palette table (CPT). Alternatively,
+supply the name of a GMT color master dynamic CPT [rainbow] to
+automatically determine a continuous CPT from
+the grid’s z-range.  If the dynamic CPT has a default range then
+that range will be imposed instead.
+Another option is to specify <strong>-C</strong><em>color1</em>,<em>color2</em>[,<em>color3</em>,…]
+to build a linear continuous CPT from those colors automatically, scaled to fit the data range.
+In this case <em>color1</em> etc can be a r/g/b triplet, a color name,
+or an HTML hexadecimal color (e.g. #aabbcc ).</dd>
+</dl>
+<dl class="docutils" id="e">
+<dt><strong>-E</strong><em>URL</em></dt>
+<dd>Instead of hosting all files on your computer, you may prepend a remote site URL. Then,
+the top-level <em>prefix</em>.kml file will use this URL to find all other files it references.
+After building completes you must place the entire <em>prefix</em> directory at the remote
+location pointed to by the <em>URL</em> [local files only]. With this arrangement you can
+share the <em>prefix</em>.kml with others (say, via email or for download) and users can
+open the file in their Google Earth and access the remote files from your server as needed.</dd>
+</dl>
+<p id="f"><strong>-F</strong><em>filtercode</em></p>
+<blockquote>
+<div>Specifies the filter to use for the downsampling of the grid for more
+distant viewing.  Choose among <strong>b</strong>oxcar, <strong>c</strong>osine arch,
+<strong>g</strong>aussian, or <strong>m</strong>edian [Gaussian].  The filter width is set
+automatically depending on the level.</div></blockquote>
+<dl class="docutils" id="h">
+<dt><strong>-H</strong><em>factor</em></dt>
+<dd>Improve the quality of rasterization by passing the sub-pixel smoothing factor
+to psconvert (same as <strong>-H</strong> option in psconvert) [no sub-pixel smoothing].</dd>
+</dl>
+<dl class="docutils" id="i">
+<dt><strong>-I</strong>[<em>intensfile</em>|<em>intensity</em>|<em>modifiers</em>]</dt>
+<dd>Gives the name of a grid file with intensities in the (-1,+1) range,
+or a constant intensity to apply everywhere; this simply affects the
+ambient light.  If just <strong>+</strong> is given then we derive an intensity
+grid from the input data grid <em>grd_z</em> via a call to <a class="reference internal" href="grdgradient.html"><span class="doc">grdgradient</span></a>
+using the arguments <strong>-A</strong>-45 and <strong>-Nt</strong>1 for that module. You can
+append <strong>+a</strong><em>azimuth</em> and <strong>+n</strong><em>args</em> to override those values.  If you want
+more specific intensities then run <a class="reference internal" href="grdgradient.html"><span class="doc">grdgradient</span></a> separately first.
+[Default is no illumination].</dd>
+</dl>
+<dl class="docutils" id="l">
+<dt><strong>-L</strong><em>tilesize</em></dt>
+<dd>Sets the fixed size of the image building blocks.  Must be an integer that
+is radix 2.  Typical values are 256 or 512 [256].</dd>
+</dl>
+<dl class="docutils" id="n">
+<dt><strong>-N</strong><em>prefix</em></dt>
+<dd>Sets a unique name prefixed used for the top-level KML filename <em>and</em> the
+directory where all referenced KML files and PNG images will be written [GMT_Quadtree].</dd>
+</dl>
+<dl class="docutils" id="q">
+<dt><strong>-Q</strong></dt>
+<dd>Make grid nodes with z = NaN transparent, using the color-masking
+feature in PostScript Level 3 (the PS device must support PS Level 3).</dd>
+</dl>
+<dl class="docutils" id="t">
+<dt><strong>-T</strong><em>title</em></dt>
+<dd>Sets the title of the top-level document (i.e., its description).</dd>
+</dl>
+<dl class="docutils" id="v">
+<dt><strong>-V</strong>[<em>level</em>] <a class="reference internal" href="gmt.html#v-full"><span class="std std-ref">(more …)</span></a></dt>
+<dd>Select verbosity level [c].  </dd>
+</dl>
+<dl class="docutils">
+<dt><strong>-f</strong>[<strong>i</strong>|<strong>o</strong>]<em>colinfo</em> <a class="reference internal" href="gmt.html#f-full"><span class="std std-ref">(more …)</span></a></dt>
+<dd>Specify data types of input and/or output columns.  </dd>
+</dl>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>The intensity grid can be created from the data grid using
+<a class="reference internal" href="grdgradient.html"><span class="doc">grdgradient</span></a> and, optionally, modified by <a class="reference internal" href="grdmath.html"><span class="doc">grdmath</span></a> or
+<a class="reference internal" href="grdhisteq.html"><span class="doc">grdhisteq</span></a>.  Custom intensity grids built with several different
+illumination angles can be combined with <a class="reference internal" href="grdmath.html"><span class="doc">grdmath</span></a>.  For a single
+illumination angle the automatic illumination can be used instead.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>To make a quadtree image representation of the large topography grid file ellice_basin.nc, using
+the default tile size, supply automatic shading based on the topography, and use the larger 512x512 tiles,
+supplying a suitable title, try</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmt</span> <span class="n">grd2kml</span> <span class="n">ellice_basin</span><span class="o">.</span><span class="n">nc</span> <span class="o">-</span><span class="n">I</span><span class="o">+</span> <span class="o">-</span><span class="n">Nellice</span> <span class="o">-</span><span class="n">L512</span> <span class="o">-</span><span class="n">T</span><span class="s2">&quot;Ellice Basin Bathymetry&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="gmt.html"><span class="doc">gmt</span></a>,
+<a class="reference internal" href="gmt.conf.html"><span class="doc">gmt.conf</span></a>,
+<a class="reference internal" href="gmt2kml.html"><span class="doc">gmt2kml</span></a>,
+<a class="reference internal" href="grdgradient.html"><span class="doc">grdgradient</span></a>,
+<a class="reference internal" href="grdhisteq.html"><span class="doc">grdhisteq</span></a>,
+<a class="reference internal" href="grdimage.html"><span class="doc">grdimage</span></a>,
+<a class="reference internal" href="grdmath.html"><span class="doc">grdmath</span></a>,
+<a class="reference internal" href="kml2gmt.html"><span class="doc">kml2gmt</span></a>,
+<a class="reference internal" href="psconvert.html"><span class="doc">psconvert</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">grd2kml</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#required-arguments">Required Arguments</a></li>
+<li><a class="reference internal" href="#optional-arguments">Optional Arguments</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="grd2cpt.html"
+                        title="previous chapter">grd2cpt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="grd2xyz.html"
+                        title="next chapter">grd2xyz</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/grd2kml.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="grd2xyz.html" title="grd2xyz"
+             >next</a> </li>
+        <li class="right" >
+          <a href="grd2cpt.html" title="grd2cpt"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="GR.html" >GR</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

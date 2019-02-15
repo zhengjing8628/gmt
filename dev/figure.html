@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>figure &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <script type="text/javascript" src="_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="inset" href="inset.html" />
+    <link rel="prev" title="docs" href="docs.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="inset.html" title="inset"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="docs.html" title="docs"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="figure">
+<h1>figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Set attributes for the current modern mode session figure</p>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p><strong>gmt figure</strong> <em>prefix</em> [<em>formats</em>] [<em>options</em>]
+[ <a class="reference internal" href="#v"><span> <strong>-V</strong></span></a></strong>[<em>level</em>] ]
+[ <strong>--PAR</strong>=<em>value</em> ]</p>
+<p><strong>Note:</strong> No space is allowed between the option flag and the associated arguments.</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>A GMT modern session can make any number of illustrations (including none).
+In situations when many illustrations will be made during the session,
+the <strong>figure</strong> module specifies the name and format(s) to use for the current plot.
+It must be issued before you start plotting to the current figure, and each
+new <strong>figure</strong> call changes plotting focus to the next figure.  You may go back and forth between
+different figure but the optional arguments (<em>formats</em> and <em>options</em>) can only
+be given the first time you specify a new figure.
+In addition to <em>prefix</em> and <em>formats</em>, you can supply a comma-separated series of
+<a class="reference internal" href="psconvert.html"><span class="doc">psconvert</span></a> options that will override the default settings provided via
+<a class="reference internal" href="gmt.conf.html#ps-convert"><span class="std std-ref">PS_CONVERT</span></a>. The only other available option controls verbosity.</p>
+</div>
+<div class="section" id="required-arguments">
+<h2>Required Arguments<a class="headerlink" href="#required-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><em>prefix</em></dt>
+<dd>Name stem used to construct final figure names,  The extension is appended
+automatically from your <em>formats</em> selection(s).</dd>
+</dl>
+</div>
+<div class="section" id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils" id="figure-formats">
+<dt><em>formats</em></dt>
+<dd>Give one or more comma-separated graphics extensions from the list of allowable graphics
+<a class="reference internal" href="begin.html#tbl-formats"><span class="std std-ref">formats</span></a> [pdf].</dd>
+</dl>
+<dl class="docutils" id="figure-options">
+<dt><em>options</em></dt>
+<dd>Sets one or more comma-separated options arguments that
+can be passed to <a class="reference internal" href="psconvert.html"><span class="doc">psconvert</span></a> when preparing this figure [A].
+The valid subset of options are
+<strong>A</strong>[<em>args</em>],<strong>C</strong><em>args</em>,<strong>D</strong><em>dir</em>,<strong>E</strong><em>dpi</em>,<strong>H</strong><em>factor</em>,<strong>M</strong><em>args</em>,<strong>Q</strong><em>args</em>,<strong>S</strong>.
+See the <a class="reference internal" href="psconvert.html"><span class="doc">psconvert</span></a> documentation for details on these options.</dd>
+</dl>
+<dl class="docutils" id="figure-v">
+<dt><strong>-V</strong>[<em>level</em>] <a class="reference internal" href="gmt.html#v-full"><span class="std std-ref">(more …)</span></a></dt>
+<dd>Select verbosity level [c].  </dd>
+</dl>
+<dl class="docutils">
+<dt><strong>-^</strong> or just <strong>-</strong></dt>
+<dd>Print a short message about the syntax of the command, then exits (NOTE: on Windows just use <strong>-</strong>).</dd>
+<dt><strong>-+</strong> or just <strong>+</strong></dt>
+<dd>Print an extensive usage (help) message, including the explanation of
+any module-specific option (but not the GMT common options), then exits.</dd>
+<dt><strong>-?</strong> or no arguments</dt>
+<dd>Print a complete usage (help) message, including the explanation of all options, then exits.</dd>
+<dt><strong>--PAR</strong>=<em>value</em></dt>
+<dd>Temporarily override a GMT default setting; repeatable.  See gmt.conf for parameters.</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>To start a new figure in your current modern mode session by the name Regional and
+request we make both a PDF and an EPS file, try</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmt</span> <span class="n">figure</span> <span class="n">Regional</span> <span class="n">pdf</span><span class="p">,</span><span class="n">eps</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To start a new figure GlobalMap that should be returned as a JPEG file with a 1 cm padding
+around the image, try</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmt</span> <span class="n">figure</span> <span class="n">GlobalMap</span> <span class="n">jpg</span> <span class="n">A1c</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="begin.html"><span class="doc">begin</span></a>,
+<a class="reference internal" href="clear.html"><span class="doc">clear</span></a>,
+<a class="reference internal" href="docs.html"><span class="doc">docs</span></a>,
+<a class="reference internal" href="end.html"><span class="doc">end</span></a>,
+<a class="reference internal" href="subplot.html"><span class="doc">subplot</span></a>,
+<a class="reference internal" href="gmt.html"><span class="doc">gmt</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">figure</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#required-arguments">Required Arguments</a></li>
+<li><a class="reference internal" href="#optional-arguments">Optional Arguments</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="docs.html"
+                        title="previous chapter">docs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="inset.html"
+                        title="next chapter">inset</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/figure.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="inset.html" title="inset"
+             >next</a> </li>
+        <li class="right" >
+          <a href="docs.html" title="docs"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

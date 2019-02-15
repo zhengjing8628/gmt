@@ -1,0 +1,227 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>(6) Demonstrate aliasing by sampling a chirp &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/searchtools.js"></script>
+    <script type="text/javascript" src="../../_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="(7) Spinning Earth showing crustal ages" href="anim07.html" />
+    <link rel="prev" title="(5) Control spline gridding via eigenvalues" href="anim05.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="anim07.html" title="(7) Spinning Earth showing crustal ages"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="anim05.html" title="(5) Control spline gridding via eigenvalues"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" accesskey="U">The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="demonstrate-aliasing-by-sampling-a-chirp">
+<span id="anim-06"></span><h1>(6) Demonstrate aliasing by sampling a chirp<a class="headerlink" href="#demonstrate-aliasing-by-sampling-a-chirp" title="Permalink to this headline">¶</a></h1>
+<p>We demonstrate how aliasing works by sampling a chirp
+at a fixed interval of 0.5 seconds.  We try to reconstruct
+the signal by using a cubic spline on the sampled values.
+This works well for at the start but once we approach the
+Nyquist frequency it breaks down badly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1">#               GMT ANIMATION 06</span>
+<span class="c1">#</span>
+<span class="c1"># Purpose:      Demonstrate aliasing by sampling a chirp</span>
+<span class="c1"># GMT modules:  math, convert, basemap, plot, text, movie, sample1d</span>
+<span class="c1"># Unix progs:   echo, cat</span>
+<span class="c1"># Note:         Run with any argument to build movie; otherwise 300th frame is plotted only.</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$#</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>   <span class="c1"># Just make master PostScript frame 300</span>
+        <span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-M300,ps -Fnone&quot;</span>
+	<span class="nv">ps</span><span class="o">=</span>anim_06.ps
+<span class="k">else</span>    <span class="c1"># Make both movie formats and a thumbnail animated GIF using every 5th frame</span>
+        <span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-Fmp4 -Fwebm -A+l+s5&quot;</span>
+<span class="k">fi</span>      
+<span class="nv">rate</span><span class="o">=</span><span class="m">6</span>			<span class="c1"># Frames per seconds</span>
+<span class="nv">frames</span><span class="o">=</span><span class="sb">`</span>gmt math -Q <span class="m">60</span> <span class="nv">$rate</span> <span class="nv">MUL</span> <span class="o">=</span><span class="sb">`</span>
+<span class="c1"># 0. Initial parameters</span>
+cat <span class="s">&lt;&lt; EOF &gt; init.sh</span>
+<span class="s">R=-R-7.5/2.5/-1.5/2	# Fixed plot domain window</span>
+<span class="s">J=-JX6.8i/4.2i		# Frame size after removing margin space</span>
+<span class="s">f=2			# Frequency of chirp in Hz at end time</span>
+<span class="s">rate=$rate</span>
+<span class="s">frames=$frames</span>
+<span class="s">EOF</span>
+<span class="c1"># 1. Create background plot and data files needed in the loop</span>
+cat <span class="s">&lt;&lt; EOF &gt; pre.sh</span>
+<span class="s">gmt begin</span>
+<span class="s">	gmt basemap \$R \$J -X0.2i -Y0.3i -Bxa2.5g10 -By0g10 -B+gcornsilk --FORMAT_FLOAT_MAP=%+5.1f</span>
+<span class="s">	cat &lt;&lt;- END | gmt plot -S0.3i -Ggreen</span>
+<span class="s">	0	-1.5	t</span>
+<span class="s">	0	+2.0	i</span>
+<span class="s">	END</span>
+<span class="s">	# Add Nyquist frequency in lower left corner</span>
+<span class="s">	echo &quot;-7.5 -1.5 Nyquist frequency = 1 Hz&quot; | gmt text -F+f18p,Helvetica-Bold+jBL -Dj0.1i/0.1i</span>
+<span class="s">gmt end</span>
+<span class="s"># Build chirp data sets for 1 minute (60 secs); one every 1 ms and one every 0.5 sec as samples</span>
+<span class="s">gmt math -T0/60/0.001 T 2 POW 2 DIV 60 DIV \$f MUL 2 MUL PI MUL COS = chirp.txt</span>
+<span class="s">gmt math -T0/60/0.5 -Ca T -C1 2 POW 2 DIV 60 DIV \$f MUL 2 MUL PI MUL COS = chirp_samples.txt</span>
+<span class="s">gmt math -T0/\$frames/1 T \$rate DIV = frame_times.txt</span>
+<span class="s">EOF</span>
+<span class="c1"># 2. Set up the main frame script</span>
+cat <span class="s">&lt;&lt; EOF &gt; main.sh</span>
+<span class="s">gmt begin</span>
+<span class="s">	# Shift the chirp in time to simulate paper movement</span>
+<span class="s">	gmt math chirp.txt -C0 \${MOVIE_COL2} SUB = chirp_shifted.txt</span>
+<span class="s">	# Plot the shifted chirp</span>
+<span class="s">	gmt plot \$R \$J chirp_shifted.txt -W1p,red -X0.2i -Y0.3i</span>
+<span class="s">	# Compute index of most recent sample number</span>
+<span class="s">	last_sample=\`gmt math -Q \${MOVIE_FRAME} \$rate 2 DIV DIV FLOOR RINT =\`</span>
+<span class="s">	# Extract all the old samples before the present</span>
+<span class="s">	gmt convert chirp_samples.txt -Z:\$last_sample &gt; tmp.txt</span>
+<span class="s">	if [ -s tmp.txt ]; then</span>
+<span class="s">		gmt math tmp.txt -C0 \${MOVIE_COL2} SUB = samples.txt</span>
+<span class="s">		gmt plot -Sc0.3c -Gblue samples.txt</span>
+<span class="s">	fi</span>
+<span class="s">	# Take a new sample every 12 frames = 0.5 seconds</span>
+<span class="s">	take_sample=\`gmt math -Q \${MOVIE_FRAME} \$rate 2 DIV MOD 0 EQ =\`</span>
+<span class="s">	if [ \${MOVIE_FRAME} -gt 12 ]; then	# Interpolating up to most recent sample</span>
+<span class="s">		gmt sample1d samples.txt -I0.001 &gt; resampled.txt</span>
+<span class="s">		gmt plot -W2.5p,blue resampled.txt</span>
+<span class="s">	fi</span>
+<span class="s">	if [ \$take_sample -eq 1 ]; then	# Take and plot sample at zero time</span>
+<span class="s">		y=\`gmt math -Q \${MOVIE_COL2} 2 POW 2 DIV 60 DIV \$f MUL 2 MUL PI MUL COS =\`</span>
+<span class="s">		echo 0 \$y | gmt plot -Sc0.5c -Gred</span>
+<span class="s">	fi</span>
+<span class="s">	# Add time counter in upper left corner</span>
+<span class="s">	printf &quot;%4.1f 2 t = %6.3f s\n&quot; -7.5 \${MOVIE_COL2} | gmt text -F+f18p,Helvetica-Bold+jTL -Dj0.1i/0.1i</span>
+<span class="s">	# Add cycles counter in upper right corner</span>
+<span class="s">	fnow=\`gmt math -Q \${MOVIE_COL2} 60 DIV \$f MUL =\`</span>
+<span class="s">	printf &quot;2.5 2 f = %6.4f Hz\n&quot; \$fnow | gmt text -F+f16p,Helvetica-Bold+jTR -Dj0.1i/0.1i</span>
+<span class="s">	# Add frame counter in lower right corner</span>
+<span class="s">	printf &quot;2.5 -1.5 %04d\n&quot; \${MOVIE_FRAME} | gmt text -F+f14p,Helvetica-Bold+jBR -Dj0.1i/0.1i</span>
+<span class="s">gmt end</span>
+<span class="s">EOF</span>
+<span class="c1"># 3. Run the movie</span>
+gmt movie main.sh -Sbpre.sh -C7.2ix4.8ix100 -Iinit.sh -Tframe_times.txt -D<span class="nv">$rate</span> -Nanim_06 -Z <span class="nv">$opt</span>
+rm -rf init.sh main.sh pre.sh
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/anim_06.png"><img alt="../_images/anim_06.png" src="../_images/anim_06.png" style="width: 0px;" /></a>
+<div class="figure align-center">
+  <video width="720" height="480" poster="../_images/anim_06.png" controls>
+    <source src="../_static/anim_06.mp4" type="video/mp4">
+    <source src="../_static/anim_06.webm" type="video/webm">
+    Your browser does not support the video tag.
+  </video>
+  <p class="caption">Demonstrate aliasing by sampling a chirp.</p>
+</div></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="anim05.html"
+                        title="previous chapter">(5) Control spline gridding via eigenvalues</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="anim07.html"
+                        title="next chapter">(7) Spinning Earth showing crustal ages</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/anim06.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="anim07.html" title="(7) Spinning Earth showing crustal ages"
+             >next</a> </li>
+        <li class="right" >
+          <a href="anim05.html" title="(5) Control spline gridding via eigenvalues"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" >The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

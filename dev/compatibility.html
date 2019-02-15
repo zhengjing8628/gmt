@@ -1,0 +1,553 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Compatibility &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <script type="text/javascript" src="_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Switching versions" href="switching.html" />
+    <link rel="prev" title="Changes" href="changes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="switching.html" title="Switching versions"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="changes.html" title="Changes"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="compatibility">
+<h1>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="incompatibilities-between-gmt-5-and-gmt-4">
+<h2>Incompatibilities between GMT 5 and GMT 4<a class="headerlink" href="#incompatibilities-between-gmt-5-and-gmt-4" title="Permalink to this headline">¶</a></h2>
+<p>As features are added and bugs are discovered, it is occasionally
+necessary to break the established syntax of a GMT program option, such as when
+the intent of the option is non-unique due to a modifier key being the
+same as a distance unit indicator. Other times we see a greatly improved
+commonality across similar options by making minor adjustments. However,
+we are aware that such changes may cause grief and trouble with
+established scripts and the habits of many GMT users. To alleviate this
+situation we have introduced a configuration that allows GMT to tolerate and process
+obsolete program syntax (to the extent possible). To activate you must
+make sure <a class="reference internal" href="gmt.conf.html#gmt-compatibility"><span class="std std-ref">GMT_COMPATIBILITY</span></a> is set to 4 in your gmt.conf file.
+When not running in compatibility mode any obsolete syntax will be considered as
+errors. We recommend that users with prior GMT 4 experience run
+GMT 5 in compatibility mode, heed the warnings about obsolete syntax, and
+correct their scripts or habits accordingly. When this transition has been
+successfully navigated it is better to turn compatibility mode off and leave
+the past behind. Occasionally, users will supply an ancient
+GMT 3 syntax which may have worked in GMT 4 but is not honored in GMT 5.</p>
+<p>Here are a list of known incompatibilities that are correctly processed
+with a warning under compatibility mode:</p>
+<ul class="simple">
+<li>GMT <strong>default names</strong>: We have
+organized the default parameters logically by group and renamed several to
+be easier to remember and to group. Old and new names can be found in
+Table <a class="reference internal" href="#tbl-obsoletedefs"><span class="std std-ref">obsolete</span></a>.
+In addition, a few defaults are no longer recognized,
+such as N_COPIES, PS_COPIES, DOTS_PR_INCH, GMT_CPTDIR, PS_DPI, and PS_EPS,
+TRANSPARENCY. This also means the old common option <strong>-c</strong> for specifying
+PostScript copies is no longer available.</li>
+<li><strong>Units</strong>: The unit abbreviation for arc seconds is finally <strong>s</strong>
+instead of <strong>c</strong>, with the same change for upper case in some clock
+format statements.</li>
+<li><strong>Contour labels</strong>: The modifiers <strong>+k</strong><em>fontcolor</em> and
+<strong>+s</strong><em>fontsize</em> are obsolete, now being part of <strong>+f</strong><em>font</em>.</li>
+<li><strong>Ellipsoids</strong>: Assigning <a class="reference internal" href="gmt.conf.html#proj-ellipsoid"><span class="std std-ref">PROJ_ELLIPSOID</span></a> a file name is
+deprecated, use comma-separated parameters <span class="math notranslate nohighlight">\(a, f^{-1}\)</span> instead.</li>
+<li><strong>Custom symbol macros:</strong> Circle macro symbol <strong>C</strong> is deprecated; use <strong>c</strong> instead.</li>
+<li><strong>Map scale</strong>: Used by <a class="reference internal" href="basemap.html"><span class="doc">basemap</span></a>
+and others. Here, the unit <strong>m</strong> is deprecated; use <strong>M</strong> for statute miles.</li>
+<li><strong>3-D perspective</strong>: Some programs used a combination of <strong>-E</strong>,
+<strong>-Z</strong> to set up a 3-D perspective view, but these options were not
+universal. The new 3-D perspective in
+GMT 5 means you instead use the
+common option <strong>-p</strong> to configure the 3-D projection.</li>
+<li><strong>Pixel vs. gridline registration:</strong> Some programs used to have a
+local <strong>-F</strong> to turn on pixel registration; now this is a common
+option <strong>-r</strong>.</li>
+<li><strong>Table file headers</strong>: For consistency with other common i/o options
+we now use <strong>-h</strong> instead of <strong>-H</strong>.</li>
+<li><strong>Segment headers</strong>: These are now automatically detected and hence
+there is no longer a <strong>-m</strong> (or the older <strong>-M</strong> option).</li>
+<li><strong>Front symbol</strong>: The syntax for the front symbol has changed from
+<strong>-Sf</strong><em>spacing/size</em>[<strong>+d</strong>][<strong>+t</strong>][:<em>offset</em>] to
+<strong>-Sf</strong><em>spacing</em>[/<em>size</em>][<strong>+r+l</strong>][<strong>+f+t+s+c+b</strong>][<strong>+o</strong><em>offset</em>].</li>
+<li><strong>Vector symbol</strong>: With the introduction of geo-vectors there are
+three kinds of vectors that can be drawn: Cartesian (straight)
+vectors with <strong>-Sv</strong> or <strong>-SV</strong>, geo-vectors (great circles) with
+<strong>-S=</strong>, and circular vectors with <strong>-Sm</strong>. These are all composed of
+a line (controlled by pen settings) and 0--2 arrow heads (control by
+fill and outline settings). Many modifiers common to all arrows have
+been introduced using the <strong>+key</strong>[<em>arg</em>] format. The <em>size</em> of a
+vector refers to the length of its head; all other quantities are
+given via modifiers (which have sensible default values). In
+particular, giving size as <em>vectorwidth/headlength/headwidth</em> is
+deprecated. See the <a class="reference internal" href="plot.html"><span class="doc">plot</span></a> man page for
+a clear description of all modifiers.</li>
+<li><a class="reference internal" href="blockmean.html"><span class="doc">blockmean</span></a>: The <strong>-S</strong> and <strong>-Sz</strong>
+options are deprecated; use <strong>-Ss</strong> instead.</li>
+<li><a class="reference internal" href="filter1d.html"><span class="doc">filter1d</span></a>: The <strong>-N</strong><em>ncol/tcol</em>
+option is deprecated; use <strong>-N</strong><em>tcol</em> instead as we automatically
+determine the number of columns in the file.</li>
+<li><a class="reference internal" href="gmt2kml.html"><span class="doc">gmt2kml</span></a>: The <strong>-L</strong> option no longer expects column numbers,
+just the column names.  This allows the extra columns to contain text
+strings but means users have to supply the data columns in the order
+specified by <strong>-L</strong>.</li>
+<li><a class="reference internal" href="gmtconvert.html"><span class="doc">convert</span></a>: <strong>-F</strong> is
+deprecated; use common option <strong>-o</strong> instead.</li>
+<li><a class="reference internal" href="gmtdefaults.html"><span class="doc">defaults</span></a>: <strong>-L</strong> is
+deprecated; this is now the default behavior.</li>
+<li><a class="reference internal" href="gmtmath.html"><span class="doc">math</span></a>: <strong>-F</strong> is deprecated; use
+common option <strong>-o</strong> instead.</li>
+<li><a class="reference internal" href="gmtselect.html"><span class="doc">select</span></a>: <strong>-Cf</strong> is deprecated;
+use common specification format <strong>-C-</strong> instead. Also,
+<strong>-N</strong>…<strong>o</strong> is deprecated; use <strong>-E</strong> instead.</li>
+<li><a class="reference internal" href="grd2xyz.html"><span class="doc">grd2xyz</span></a>: <strong>-E</strong> is deprecated as
+the ESRI ASCII exchange format is now detected automatically.</li>
+<li><a class="reference internal" href="grdcontour.html"><span class="doc">grdcontour</span></a>: <strong>-m</strong> is deprecated
+as segment headers are handled automatically.</li>
+<li><a class="reference internal" href="grdfft.html"><span class="doc">grdfft</span></a>: <strong>-M</strong> is deprecated; use
+common option <strong>-fg</strong> instead.</li>
+<li><a class="reference internal" href="grdgradient.html"><span class="doc">grdgradient</span></a>: <strong>-L</strong> is
+deprecated; use common option <strong>-n</strong> instead. Also, <strong>-M</strong> is
+deprecated; use common option <strong>-fg</strong> instead.</li>
+<li><a class="reference internal" href="grdlandmask.html"><span class="doc">grdlandmask</span></a>: <strong>-N</strong>…<strong>o</strong>
+is deprecated; use <strong>-E</strong> instead.</li>
+<li><a class="reference internal" href="grdimage.html"><span class="doc">grdimage</span></a>: <strong>-S</strong> is deprecated;
+use <strong>-n</strong><em>mode</em>[<strong>+a</strong>][<strong>+t</strong><em>threshold</em>] instead.</li>
+<li><a class="reference internal" href="grdmath.html"><span class="doc">grdmath</span></a>: LDIST and PDIST now return
+distances in spherical degrees; while in
+GMT 4 it returned km; use
+DEG2KM for conversion, if needed.</li>
+<li><a class="reference internal" href="grdproject.html"><span class="doc">grdproject</span></a>: <strong>-S</strong> is
+deprecated; use <strong>-n</strong><em>mode</em>[<strong>+a</strong>][<strong>+t</strong><em>threshold</em>]
+instead. Also, <strong>-N</strong> is deprecated; use <strong>-D</strong> instead.</li>
+<li><a class="reference internal" href="grdsample.html"><span class="doc">grdsample</span></a>: <strong>-Q</strong> is deprecated;
+use <strong>-n</strong><em>mode</em>[<strong>+a</strong>][<strong>+t</strong><em>threshold</em>] instead. Also,
+<strong>-L</strong> is deprecated; use common option <strong>-n</strong> instead, and
+<strong>-N</strong><em>nx/ny</em> is deprecated; use <strong>-I</strong><em>nx</em><strong>+n</strong>/<em>ny</em><strong>+n</strong> instead.</li>
+<li><a class="reference internal" href="grdtrack.html"><span class="doc">grdtrack</span></a>: <strong>-Q</strong> is deprecated;
+use <strong>-n</strong><em>mode</em>[<strong>+a</strong>][<strong>+t</strong><em>threshold</em>] instead. Also,
+<strong>-L</strong> is deprecated; use common option <strong>-n</strong> instead, and <strong>-S</strong> is
+deprecated; use common option <strong>-sa</strong> instead.</li>
+<li><a class="reference internal" href="grdvector.html"><span class="doc">grdvector</span></a>: <strong>-E</strong> is deprecated;
+use the vector modifier <strong>+jc</strong> as well as the general vector
+specifications discussed earlier.</li>
+<li><a class="reference internal" href="grdview.html"><span class="doc">grdview</span></a>: <strong>-L</strong> is deprecated; use common option <strong>-n</strong> instead.</li>
+<li><a class="reference internal" href="nearneighbor.html"><span class="doc">nearneighbor</span></a>: <strong>-L</strong> is
+deprecated; use common option <strong>-n</strong> instead.</li>
+<li><a class="reference internal" href="project.html"><span class="doc">project</span></a>: <strong>-D</strong> is deprecated; use <strong>-</strong><strong>-</strong><a class="reference internal" href="gmt.conf.html#format-geo-out"><span class="std std-ref">FORMAT_GEO_OUT</span></a> instead.</li>
+<li><a class="reference internal" href="basemap.html"><span class="doc">basemap</span></a>: <strong>-G</strong> is deprecated;
+specify canvas color via <strong>-B</strong> modifier <strong>+g</strong><em>color</em>.</li>
+<li><a class="reference internal" href="coast.html"><span class="doc">coast</span></a>: <strong>-m</strong> is deprecated and
+have reverted to <strong>-M</strong> for selecting data output instead of plotting.</li>
+<li><a class="reference internal" href="contour.html"><span class="doc">contour</span></a>: <strong>-T</strong><em>indexfile</em> is deprecated; use <strong>-Q</strong><em>indexfile</em>.</li>
+<li><a class="reference internal" href="histogram.html"><span class="doc">histogram</span></a>: <strong>-T</strong><em>col</em> is
+deprecated; use common option <strong>-i</strong> instead.</li>
+<li><a class="reference internal" href="legend.html"><span class="doc">legend</span></a>: Paragraph text header flag &gt; is deprecated; use P instead.</li>
+<li><a class="reference internal" href="mask.html"><span class="doc">mask</span></a>: <strong>-D</strong>…<strong>+n</strong><em>min</em> is deprecated; use <strong>-Q</strong> instead.</li>
+<li><a class="reference internal" href="rose.html"><span class="doc">rose</span></a>: Old vector specifications in
+Option <strong>-M</strong> are deprecated; see new explanations.</li>
+<li><a class="reference internal" href="text.html"><span class="doc">text</span></a>: <strong>-m</strong> is deprecated; use
+<strong>-M</strong> to indicate paragraph mode. Also, <strong>-S</strong> is deprecated as
+fonts attributes are now specified via the font itself.</li>
+<li><a class="reference internal" href="wiggle.html"><span class="doc">wiggle</span></a>: <strong>-D</strong> is deprecated;
+use common option <strong>-g</strong> to indicate data gaps. Also, <strong>-N</strong> is
+deprecated as all fills are set via the <strong>-G</strong> option.</li>
+<li><a class="reference internal" href="plot.html"><span class="doc">plot</span></a>: Old vector specifications in
+Option <strong>-S</strong> are deprecated; see new explanations.</li>
+<li><a class="reference internal" href="plot3d.html"><span class="doc">plot3d</span></a>: Old vector specifications in
+Option <strong>-S</strong> are deprecated; see new explanations.</li>
+<li><a class="reference internal" href="splitxyz.html"><span class="doc">splitxyz</span></a>: <strong>-G</strong> is deprecated;
+use common option <strong>-g</strong> to indicate data gaps. Also, <strong>-M</strong> is
+deprecated; use common option <strong>-fg</strong> instead.</li>
+<li><a class="reference internal" href="triangulate.html"><span class="doc">triangulate</span></a>: <strong>-m</strong> is
+deprecated; use <strong>-M</strong> to output triangle vertices.</li>
+<li><a class="reference internal" href="xyz2grd.html"><span class="doc">xyz2grd</span></a>: <strong>-E</strong> is deprecated as
+the ESRI ASCII exchange format is one of our recognized formats.
+Also, <strong>-A</strong> (no arguments) is deprecated; use <strong>-Az</strong> instead.</li>
+<li>grdraster: Now in the main GMT core.  The
+<strong>H</strong><em>skip</em> field in <code class="docutils literal notranslate"><span class="pre">grdraster.info</span></code> is no longer expected as we automatically
+determine if a raster has a GMT header. Also, to output
+<em>x,y,z</em> triplets instead of writing a grid now requires <strong>-T</strong>.</li>
+<li><a class="reference internal" href="supplements/img/img2grd.html"><span class="doc">img2grd</span></a>: <strong>-m</strong><em>inc</em> is
+deprecated; use <strong>-I</strong><em>inc</em> instead.</li>
+<li><a class="reference internal" href="supplements/meca/velo.html"><span class="doc">velo</span></a>: Old vector
+specifications are deprecated; see new explanations.</li>
+<li><a class="reference internal" href="supplements/mgd77/mgd77convert.html"><span class="doc">mgd77convert</span></a>:
+<strong>-4</strong> is deprecated; use <strong>-D</strong> instead.</li>
+<li><a class="reference internal" href="supplements/mgd77/mgd77list.html"><span class="doc">mgd77list</span></a>: The unit
+<strong>m</strong> is deprecated; use <strong>M</strong> for statute miles.</li>
+<li><a class="reference internal" href="supplements/mgd77/mgd77manage.html"><span class="doc">mgd77manage</span></a>: The
+unit <strong>m</strong> is deprecated; use <strong>M</strong> for statute miles. The <strong>-Q</strong> is
+deprecated; use <strong>-n</strong><em>mode</em>[<strong>+a</strong>][<strong>+t</strong><em>threshold</em>] instead</li>
+<li><a class="reference internal" href="supplements/mgd77/mgd77path.html"><span class="doc">mgd77path</span></a>: <strong>-P</strong> is
+deprecated (clashes with
+GMT common options); use <strong>-A</strong> instead.</li>
+<li><a class="reference internal" href="supplements/spotter/backtracker.html"><span class="doc">backtracker</span></a>:
+<strong>-C</strong> is deprecated as stage vs. finite rotations are detected
+automatically.</li>
+<li><a class="reference internal" href="supplements/spotter/grdrotater.html"><span class="doc">grdrotater</span></a>:
+<strong>-C</strong> is deprecated as stage vs. finite rotations are detected
+automatically. Also, <strong>-T</strong><em>lon/lat/angle</em> is now set via
+<strong>-e</strong><em>lon/lat/angle</em>.</li>
+<li><a class="reference internal" href="supplements/spotter/grdspotter.html"><span class="doc">grdspotter</span></a>:
+<strong>-C</strong> is deprecated as stage vs. finite rotations are detected
+automatically.</li>
+<li><a class="reference internal" href="supplements/spotter/hotspotter.html"><span class="doc">hotspotter</span></a>: <strong>-C</strong>
+is deprecated as stage vs. finite rotations are detected
+automatically.</li>
+<li><a class="reference internal" href="supplements/spotter/originater.html"><span class="doc">originater</span></a>:
+<strong>-C</strong> is deprecated as stage vs. finite rotations are detected
+automatically.</li>
+<li><a class="reference internal" href="supplements/spotter/rotconverter.html"><span class="doc">rotconverter</span></a>:
+<strong>-Ff</strong> selection is deprecated, use <strong>-Ft</strong> instead.</li>
+<li><a class="reference internal" href="supplements/x2sys/x2sys_datalist.html"><span class="doc">x2sys_datalist</span></a>:
+The unit <strong>m</strong> is deprecated; use <strong>M</strong> for statute miles.</li>
+</ul>
+<table border="1" class="docutils" id="tbl-obsoletedefs">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><strong>Old Name</strong></th>
+<th class="head"><strong>New Name</strong></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>ANNOT_FONT_PRIMARY</strong></td>
+<td><strong>FONT_ANNOT_PRIMARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>ANNOT_FONT_SECONDARY</strong></td>
+<td><strong>FONT_ANNOT_SECONDARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>ANNOT_FONT_SIZE_PRIMARY</strong></td>
+<td><strong>FONT_ANNOT_PRIMARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>ANNOT_FONT_SIZE_SECONDARY</strong></td>
+<td><strong>FONT_ANNOT_SECONDARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>ANNOT_MIN_ANGLE</strong></td>
+<td><strong>MAP_ANNOT_MIN_SPACING</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>ANNOT_OFFSET_PRIMARY</strong></td>
+<td><strong>MAP_ANNOT_OFFSET_PRIMARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>ANNOT_OFFSET_SECONDARY</strong></td>
+<td><strong>MAP_ANNOT_OFFSET_SECONDARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>BASEMAP_AXES</strong></td>
+<td><strong>MAP_FRAME_AXES</strong></td>
+</tr>
+<tr class="row-even"><td><strong>BASEMAP_FRAME_RGB</strong></td>
+<td><strong>MAP_DEFAULT_PEN</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>BASEMAP_TYPE</strong></td>
+<td><strong>MAP_FRAME_TYPE</strong></td>
+</tr>
+<tr class="row-even"><td><strong>CHAR_ENCODING</strong></td>
+<td><strong>PS_CHAR_ENCODING</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>D_FORMAT</strong></td>
+<td><strong>FORMAT_FLOAT_OUT</strong></td>
+</tr>
+<tr class="row-even"><td><strong>DEGREE_SYMBOL</strong></td>
+<td><strong>MAP_DEGREE_SYMBOL</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>ELLIPSOID</strong></td>
+<td><strong>PROJ_ELLIPSOID</strong></td>
+</tr>
+<tr class="row-even"><td><strong>FIELD_DELIMITER</strong></td>
+<td><strong>IO_COL_SEPARATOR</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>FRAME_PEN</strong></td>
+<td><strong>MAP_FRAME_PEN</strong></td>
+</tr>
+<tr class="row-even"><td><strong>FRAME_WIDTH</strong></td>
+<td><strong>MAP_FRAME_WIDTH</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>GLOBAL_X_SCALE</strong></td>
+<td><strong>PS_SCALE_X</strong></td>
+</tr>
+<tr class="row-even"><td><strong>GLOBAL_Y_SCALE</strong></td>
+<td><strong>PS_SCALE_Y</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>GRID_CROSS_SIZE_PRIMARY</strong></td>
+<td><strong>MAP_GRID_CROSS_SIZE_PRIMARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>GRID_CROSS_SIZE_SECONDARY</strong></td>
+<td><strong>MAP_GRID_CROSS_SIZE_SECONDARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>GRID_PEN_PRIMARY</strong></td>
+<td><strong>MAP_GRID_PEN_PRIMARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>GRID_PEN_SECONDARY</strong></td>
+<td><strong>MAP_GRID_PEN_SECONDARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>GRIDFILE_FORMAT</strong></td>
+<td><strong>IO_GRIDFILE_FORMAT</strong></td>
+</tr>
+<tr class="row-even"><td><strong>GRIDFILE_SHORTHAND</strong></td>
+<td><strong>IO_GRIDFILE_SHORTHAND</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>HEADER_FONT_SIZE</strong></td>
+<td><strong>FONT_TITLE</strong></td>
+</tr>
+<tr class="row-even"><td><strong>HEADER_FONT</strong></td>
+<td><strong>FONT_TITLE</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>HEADER_OFFSET</strong></td>
+<td><strong>MAP_TITLE_OFFSET</strong></td>
+</tr>
+<tr class="row-even"><td><strong>HISTORY</strong></td>
+<td><strong>GMT_HISTORY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>HSV_MAX_SATURATION</strong></td>
+<td><strong>COLOR_HSV_MAX_S</strong></td>
+</tr>
+<tr class="row-even"><td><strong>HSV_MAX_VALUE</strong></td>
+<td><strong>COLOR_HSV_MAX_V</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>HSV_MIN_SATURATION</strong></td>
+<td><strong>COLOR_HSV_MIN_S</strong></td>
+</tr>
+<tr class="row-even"><td><strong>HSV_MIN_VALUE</strong></td>
+<td><strong>COLOR_HSV_MIN_V</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>INPUT_CLOCK_FORMAT</strong></td>
+<td><strong>FORMAT_CLOCK_IN</strong></td>
+</tr>
+<tr class="row-even"><td><strong>INPUT_DATE_FORMAT</strong></td>
+<td><strong>FORMAT_DATE_IN</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>INTERPOLANT</strong></td>
+<td><strong>GMT_INTERPOLANT</strong></td>
+</tr>
+<tr class="row-even"><td><strong>LABEL_FONT</strong></td>
+<td><strong>FONT_LABEL</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>LABEL_OFFSET</strong></td>
+<td><strong>MAP_LABEL_OFFSET</strong></td>
+</tr>
+<tr class="row-even"><td><strong>LINE_STEP</strong></td>
+<td><strong>MAP_LINE_STEP</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>MAP_SCALE_FACTOR</strong></td>
+<td><strong>PROJ_SCALE_FACTOR</strong></td>
+</tr>
+<tr class="row-even"><td><strong>MEASURE_UNIT</strong></td>
+<td><strong>PROJ_LENGTH_UNIT</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>NAN_RECORDS</strong></td>
+<td><strong>IO_NAN_RECORDS</strong></td>
+</tr>
+<tr class="row-even"><td><strong>OBLIQUE_ANNOTATION</strong></td>
+<td><strong>MAP_ANNOT_OBLIQUE</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>OUTPUT_CLOCK_FORMAT</strong></td>
+<td><strong>FORMAT_CLOCK_OUT</strong></td>
+</tr>
+<tr class="row-even"><td><strong>OUTPUT_DATE_FORMAT</strong></td>
+<td><strong>FORMAT_DATE_OUT</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>OUTPUT_DEGREE_FORMAT</strong></td>
+<td><strong>FORMAT_GEO_OUT</strong></td>
+</tr>
+<tr class="row-even"><td><strong>PAGE_COLOR</strong></td>
+<td><strong>PS_PAGE_COLOR</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>PAGE_ORIENTATION</strong></td>
+<td><strong>PS_PAGE_ORIENTATION</strong></td>
+</tr>
+<tr class="row-even"><td><strong>PAPER_MEDIA</strong></td>
+<td><strong>PS_MEDIA</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>PLOT_CLOCK_FORMAT</strong></td>
+<td><strong>FORMAT_CLOCK_MAP</strong></td>
+</tr>
+<tr class="row-even"><td><strong>PLOT_DATE_FORMAT</strong></td>
+<td><strong>FORMAT_DATE_MAP</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>PLOT_DEGREE_FORMAT</strong></td>
+<td><strong>FORMAT_GEO_MAP</strong></td>
+</tr>
+<tr class="row-even"><td><strong>POLAR_CAP</strong></td>
+<td><strong>MAP_POLAR_CAP</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>PS_COLOR</strong></td>
+<td><strong>COLOR_HSV_MAX_V</strong></td>
+</tr>
+<tr class="row-even"><td><strong>TICK_LENGTH</strong></td>
+<td><strong>MAP_TICK_LENGTH_PRIMARY|SECONDARY</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>TICK_PEN</strong></td>
+<td><strong>MAP_TICK_PEN_PRIMARY|SECONDARY</strong></td>
+</tr>
+<tr class="row-even"><td><strong>TIME_FORMAT_PRIMARY</strong></td>
+<td><strong>FORMAT_TIME_PRIMARY_MAP</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>TIME_FORMAT_SECONDARY</strong></td>
+<td><strong>FORMAT_TIME_SECONDARY_MAP</strong></td>
+</tr>
+<tr class="row-even"><td><strong>UNIX_TIME_FORMAT</strong></td>
+<td><strong>FORMAT_TIME_STAMP</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>UNIX_TIME_POS</strong></td>
+<td><strong>MAP_LOGO_POS</strong></td>
+</tr>
+<tr class="row-even"><td><strong>UNIX_TIME</strong></td>
+<td><strong>MAP_LOGO</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>VECTOR_SHAPE</strong></td>
+<td><strong>MAP_VECTOR_SHAPE</strong></td>
+</tr>
+<tr class="row-even"><td><strong>VERBOSE</strong></td>
+<td><strong>GMT_VERBOSE</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>WANT_LEAP_SECONDS</strong></td>
+<td><strong>TIME_LEAP_SECONDS</strong></td>
+</tr>
+<tr class="row-even"><td><strong>X_ORIGIN</strong></td>
+<td><strong>MAP_ORIGIN_X</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>XY_TOGGLE</strong></td>
+<td><strong>IO_LONLAT_TOGGLE</strong></td>
+</tr>
+<tr class="row-even"><td><strong>Y_AXIS_TYPE</strong></td>
+<td><strong>MAP_ANNOT_ORTHO</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>Y_ORIGIN</strong></td>
+<td><strong>MAP_ORIGIN_Y</strong></td>
+</tr>
+<tr class="row-even"><td><strong>Y2K_OFFSET_YEAR</strong></td>
+<td><strong>TIME_Y2K_OFFSET_YEAR</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Note: While <strong>TIME_LEAP_SECONDS</strong> is a recognized keyword it is
+currently not implemented and has no effect.  We reserve the right
+to enable this feature in the future.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Compatibility</a><ul>
+<li><a class="reference internal" href="#incompatibilities-between-gmt-5-and-gmt-4">Incompatibilities between GMT 5 and GMT 4</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="changes.html"
+                        title="previous chapter">Changes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="switching.html"
+                        title="next chapter">Switching versions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/compatibility.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="switching.html" title="Switching versions"
+             >next</a> </li>
+        <li class="right" >
+          <a href="changes.html" title="Changes"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>

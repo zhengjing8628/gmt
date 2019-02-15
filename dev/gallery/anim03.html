@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>(3) Orbiting a static map &#8212; GMT 6.0.0 documentation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/searchtools.js"></script>
+    <script type="text/javascript" src="../../_static/rtd-sidebar.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="(4) Flying over topography" href="anim04.html" />
+    <link rel="prev" title="(2) Examining DEMs using variable illumination" href="anim02.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="anim04.html" title="(4) Flying over topography"
+             accesskey="N">next</a> </li>
+        <li class="right" >
+          <a href="anim02.html" title="(2) Examining DEMs using variable illumination"
+             accesskey="P">previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" accesskey="U">The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="orbiting-a-static-map">
+<span id="anim-03"></span><h1>(3) Orbiting a static map<a class="headerlink" href="#orbiting-a-static-map" title="Permalink to this headline">¶</a></h1>
+<p>Our third animation keeps a fixed gridded data set but moves the camera
+angle around the full 360. We use
+<a class="reference internal" href="../grdview.html"><span class="doc">grdview</span></a> to generate a shaded-relief
+image sequence using the new enhanced <strong>-E</strong> option. No additional
+information is plotted on the image. As before we produce an animated
+GIF image and a simple HTML wrapper for it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1">#               GMT ANIMATION 03</span>
+<span class="c1">#</span>
+<span class="c1"># Purpose:      Make web page with simple animated GIF of Iceland topo</span>
+<span class="c1"># GMT modules:  grdclip, grdgradient, makecpt, grdview, movie</span>
+<span class="c1"># Unix progs:   echo, cat</span>
+<span class="c1"># Note:         Run with any argument to build movie; otherwise 1st frame is plotted only.</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$#</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>	<span class="c1"># Just make master PostScript frame 27 (az = 135)</span>
+	<span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-M27,ps -Fnone&quot;</span>
+	<span class="nv">ps</span><span class="o">=</span>anim_03.ps
+<span class="k">else</span>	<span class="c1"># Make animated GIF, infinitely looping</span>
+	<span class="nv">opt</span><span class="o">=</span><span class="s2">&quot;-A+l&quot;</span>
+<span class="k">fi</span>	
+<span class="c1"># 1. Create files needed in the loop</span>
+cat <span class="s">&lt;&lt; EOF &gt; pre.sh</span>
+<span class="s">	gmt math -T0/355/5 -o1 T = angles.txt</span>
+<span class="s">	gmt makecpt -Crelief -T-2000/2000/20 &gt; iceland.cpt</span>
+<span class="s">	gmt grdclip -Sb0/-1 -Gabove.nc @Iceland.nc</span>
+<span class="s">EOF</span>
+<span class="c1"># 2. Set up the main frame script</span>
+cat <span class="s">&lt;&lt; EOF &gt; main.sh</span>
+<span class="s">gmt begin</span>
+<span class="s">	gmt grdview above.nc -R-26/-12/63/67 -JM2.5i -Ciceland.cpt -Qi100 -Bafg \</span>
+<span class="s">		-X0.5i -Y0.5i -p\${MOVIE_COL1}/35+w20W/65N+v1.5i/0.75i</span>
+<span class="s">gmt end</span>
+<span class="s">EOF</span>
+<span class="c1"># 3. Run the movie</span>
+gmt movie main.sh -C4ix2.5ix100 -Nanim_03 -Tangles.txt -Sbpre.sh -D10 -Z <span class="nv">$opt</span>
+rm -rf main.sh pre.sh
+</pre></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/anim_03.gif"><img alt="../_images/anim_03.gif" src="../_images/anim_03.gif" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Orbiting a static map.</span></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="anim02.html"
+                        title="previous chapter">(2) Examining DEMs using variable illumination</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="anim04.html"
+                        title="next chapter">(4) Flying over topography</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/gallery/anim03.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="anim04.html" title="(4) Flying over topography"
+             >next</a> </li>
+        <li class="right" >
+          <a href="anim02.html" title="(2) Examining DEMs using variable illumination"
+             >previous</a> </li>
+  <li><a href="/projects/gmt/wiki/Documentation">Project Home</a>  &#187;</li>
+  
+        <li class="nav-item nav-item-0"><a href="../index.html">GMT 6.0.0 documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../Gallery.html" >The GMT historical collection</a> &#187;</li>
+<li class="right">
+<form class="search" accept-charset="UTF-8" action="search.html" method="get">
+  <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"></div>
+  <label for="q">
+    <a class="search" href="search.html" accesskey="s" original-title="">Search:</a>
+  </label>
+  <input accesskey="f" class="small" id="q" name="q" size="20" type="text">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form></li>
+   
+
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2019, P. Wessel, W. H. F. Smith, R. Scharroo, J. Luis, and F. Wobbe.
+  Last updated on Feb 15, 2019.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+  </body>
+</html>
